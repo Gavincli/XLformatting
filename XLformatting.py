@@ -21,7 +21,8 @@ myWorkbook.save("updated exel file name")
 
 #apply filters for each worksheet
 for worksheet in myWorkbook.worksheets:
-    worksheet.auto_filter.ref = f"A1:D{len(columns) + 1}"
+    max_row = worksheet.max_row
+    worksheet.auto_filter.ref = f"A1:D{max_row}"
 
 # formats each column with bold font and proper size
 for col in ['A', 'B', 'C', 'D', 'F', 'G']:
