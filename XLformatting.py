@@ -15,9 +15,13 @@ rowNum = 2
 for row in currentSheet.iter_rows(min_row=rowNum, values_only=True):
     classTitle = row[0]
     if classTitle and classTitle not in myWorkbook.sheetnames:
-        myWorkbook.create_sheet(title=classTitle)
+        worksheet = myWorkbook.create_sheet(title=classTitle)
 myWorkbook.save("updated exel file name")
 
+
+#apply filters for each worksheet
+for worksheet in myWorkbook.worksheets:
+    worksheet.auto_filter.ref = f"A1:D{len(columns) + 1}"
 
 # formats each column with bold font and proper size
 for col in ['A', 'B', 'C', 'D', 'F', 'G']:
