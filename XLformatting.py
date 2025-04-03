@@ -6,17 +6,41 @@ import openpyxl
 from openpyxl import Workbook
 from openpyxl.styles import Font
 
-myWorkbook = openpyxl.load_workbook("excel file name")
-
+#insert path to the file!!
+myWorkbook = openpyxl.load_workbook()
+# setting up the worksheet to be the active sheet in our file
 currentSheet = myWorkbook.active
 
-rowNum = 2
 
+# setting up variables
+colNum = 1
+
+rowNum = 2
+# creating a for loop to split up names and ID, and to create new sheets
 for row in currentSheet.iter_rows(min_row=rowNum, values_only=True):
     classTitle = row[0]
-    if classTitle and classTitle not in myWorkbook.sheetnames:
+    lstStudInfo = row[1].split('_')
+    lstStudInfo.append(row[2])
+
+    if classTitle not in myWorkbook.sheetnames:
+        printRow = 1
+        myWorkbook.create_sheet(title=classTitle)
+        myWorkbook[classTitle]['A1'] = 'First Name'
+        myWorkbook[classTitle]['B1'] = 'Last Name'
+        myWorkbook[classTitle]['C1'] = 'Student ID'
+        myWorkbook[classTitle]['D1'] = 'Grade'
+
+    #move down a row per iteration
+    printRow += 1
+    #print values on the new sheet as long as the classTitle matches
+    #myWorkbook[classTitle]['A' + str(printRow)].append(lstStudInfo)
+    myWorkbook[classTitle]['A' + str(printRow)] = lstStudInfo[0]
+    myWorkbook[classTitle]['B' + str(printRow)] = lstStudInfo[1]
+    myWorkbook[classTitle]['C' + str(printRow)] = lstStudInfo[2]
+    myWorkbook[classTitle]['D' + str(printRow)] = lstStudInfo[3]
+
         worksheet = myWorkbook.create_sheet(title=classTitle)
-myWorkbook.save("updated exel file name")
+
 
 
 #apply filters for each worksheet
@@ -30,4 +54,4 @@ for col in ['A', 'B', 'C', 'D', 'F', 'G']:
     sheet.column_dimensions[col].width = len(sheet[f'{col}1'].value) + 5
 
 # Saves the new file
-Poorly_Organized_Data_1.save('formatted_grades.xlsx')
+myWorkbook.save('formatted_grades.xlsx')
